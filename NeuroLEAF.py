@@ -76,7 +76,6 @@ scaled_features = scaler.fit_transform(features)
 genetic_features = np.round(scaled_features, 2)  # Öznitelikleri yuvarlayarak genetik yapının tanımlanması
 
 # Genetik algoritmanın kullanılması
-# (Genetik algoritma örneği sağlayamıyorum çünkü genetik algoritmanın tasarımı ve uygulanması projenizin spesifik gereksinimlerine bağlı olacaktır)
 
 # Aşama 4: Genetik Algoritmanın Yaprak Tasarımı İçin Kullanılması
 
