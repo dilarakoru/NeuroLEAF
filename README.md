@@ -49,8 +49,5 @@ Değişikliklerinizi yapın ve commit'leyin: git commit -m 'Yeni bir özellik ek
 Forkladığınız repoya pushlayın: git push origin feature/yeni-ozellik
 Pull request oluşturun ve değişikliklerinizi tartışmaya açın.
 
-## Lisans
-
-Bu proje MIT lisansı altında lisanslanmıştır. Daha fazla bilgi için LICENSE dosyasına başvurun.
 ---------------------------------------------------------------------------------------
 Bu README dosyası, yaprak tasarımı projesini tanıtmak ve projeyi çalıştırmak için temel adımları açıklamak amacıyla oluşturulmuştur. Ayrıntılı talimatlar ve örnekler için ilgili koddaki açıklamaları ve belgeleri inceleyebilirsiniz.
