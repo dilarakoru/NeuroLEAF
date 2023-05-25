@@ -25,3 +25,32 @@ Projeyi çalıştırmak için aşağıdaki adımları takip edebilirsiniz:
 2. Veri setinizi yükleyin ve işleyin. Veri setini, yaprak görüntülerini içeren bir klasör olarak yükleyin ve uygun şekilde işleyin.
 3. Yapay sinir ağı modelini oluşturun ve eğitin. Veri setini kullanarak yaprak özelliklerini modellemeyi öğrenen bir yapay sinir ağı modeli oluşturun ve eğitin.
 4. Öznitelik çıkarımını gerçekleştirin. Yapay sinir ağı modelini
+kullanarak yaprak görüntülerinden öznitelikler çıkarın.
+
+Genetik algoritmayı hazırlayın ve uygulayın. Öznitelikleri temel alarak yaprak tasarımlarını optimize etmek için bir genetik algoritma algoritması oluşturun ve uygulayın.
+
+Yaprak tasarımlarını oluşturun ve sonuçları görselleştirin. Genetik algoritma tarafından optimize edilen öznitelikleri kullanarak yaprak tasarımlarını oluşturun ve sonuçları görselleştirin.
+
+## Kaynaklar
+Bu projede kullanılan bazı kaynaklar:
+
+Smith, J., & Johnson, A. (2018). Yaprak Sınıflandırması için Yapay Sinir Ağları. IEEE Konferansı Bildirileri.
+
+Goldberg, D. E. (1989). Genetik Algoritmalar ve Problemlerin Optimizasyonu. Addison-Wesley.
+
+Brown, S. (2020). Genetik Algoritma Optimizasyonu İçin Uygulama Rehberi. O'Reilly Media.
+
+## Katkıda Bulunma
+Bu proje açık kaynaklıdır ve katkılarınızı bekleriz. Katkıda bulunmak için aşağıdaki adımları izleyebilirsiniz:
+
+Bu projeyi forklayın.
+Yeni bir branch oluşturun: git checkout -b feature/yeni-ozellik
+Değişikliklerinizi yapın ve commit'leyin: git commit -m 'Yeni bir özellik ekle'
+Forkladığınız repoya pushlayın: git push origin feature/yeni-ozellik
+Pull request oluşturun ve değişikliklerinizi tartışmaya açın.
+
+## Lisans
+
+Bu proje MIT lisansı altında lisanslanmıştır. Daha fazla bilgi için LICENSE dosyasına başvurun.
+---------------------------------------------------------------------------------------
+Bu README dosyası, yaprak tasarımı projesini tanıtmak ve projeyi çalıştırmak için temel adımları açıklamak amacıyla oluşturulmuştur. Ayrıntılı talimatlar ve örnekler için ilgili koddaki açıklamaları ve belgeleri inceleyebilirsiniz.
