@@ -1,80 +1,132 @@
-import pandas as pd
-import numpy as np
-from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import StandardScaler
-import tensorflow as tf
-from deap import creator, base, tools, algorithms
-import matplotlib.pyplot as plt
+# Aşama 1: Veri Seti Hazırlama ve Ön İşleme
 
-# Veri setinin yüklenmesi
-data = pd.read_csv("veri-seti.csv")
+import os
+from keras.preprocessing.image import ImageDataGenerator
 
-# Sadece Çınar, Asma ve Zeytin ağacı yapraklarını içeren veri seti oluşturulması
-selected_leaves = ["Cinar agaci yapragi", "Asma Yapragi", "Zeytin agaci yapragi"]
-data = data[data["etiket"].isin(selected_leaves)]
+data_dir = 'veri_seti_klasoru'
 
-# Veri setinin eğitim ve test olarak bölünmesi
-X = data.drop('etiket', axis=1)
-y = data['etiket']
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+# Veri genişletme ve ön işleme parametreleri
+batch_size = 32
+target_size = (128, 128)
 
-# Veri setinin normalleştirilmesi
-scaler = StandardScaler()
-X_train = scaler.fit_transform(X_train)
-X_test = scaler.transform(X_test)
+# Veri genişletme yapma
+data_generator = ImageDataGenerator(
+    rescale=1./255,
+    rotation_range=20,
+    width_shift_range=0.2,
+    height_shift_range=0.2,
+    shear_range=0.2,
+    zoom_range=0.2,
+    horizontal_flip=True,
+    validation_split=0.2
+)
 
-# Yapay sinir ağı modelinin oluşturulması
-model = tf.keras.Sequential([
-  tf.keras.layers.Dense(64, activation='relu', input_shape=(len(X.columns),)),
-  tf.keras.layers.Dense(64, activation='relu'),
-  tf.keras.layers.Dense(2, activation='softmax')
-])
+# Eğitim veri seti
+train_generator = data_generator.flow_from_directory(
+    data_dir,
+    target_size=target_size,
+    batch_size=batch_size,
+    subset='training'
+)
+
+# Doğrulama veri seti
+validation_generator = data_generator.flow_from_directory(
+    data_dir,
+    target_size=target_size,
+    batch_size=batch_size,
+    subset='validation'
+)
+
+
+# Aşama 2: Yapay Sinir Ağı (CNN) ile Öznitelik Çıkarımı
+
+from keras.applications import VGG16
+from keras.models import Model
+from keras.layers import Flatten, Dense
+
+# Önceden eğitilmiş VGG16 modelini yükleyin (ağırlıklar 'imagenet' ile eğitilmiş)
+base_model = VGG16(weights='imagenet', include_top=False, input_shape=(128, 128, 3))
+
+# Öznitelik çıkarımı için CNN modelini oluşturun
+x = base_model.output
+x = Flatten()(x)
+x = Dense(256, activation='relu')(x)
+output = Dense(3, activation='softmax')(x)
+
+model = Model(inputs=base_model.input, outputs=output)
+
+# CNN modelini eğitim veri setiyle eğitin
 model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
+model.fit(train_generator, epochs=10, validation_data=validation_generator)
 
-# Yapay sinir ağı modelinin eğitilmesi
-y_train_one_hot = tf.keras.utils.to_categorical(y_train, num_classes=2)
-model.fit(X_train, y_train_one_hot, epochs=10, validation_data=(X_test, tf.keras.utils.to_categorical(y_test, num_classes=2)))
+
+# Aşama 3: Özniteliklerin Genetik Algoritmaya Entegrasyonu
+
+import numpy as np
+from sklearn.preprocessing import MinMaxScaler
 
 # Öznitelik çıkarımı
-intermediate_layer_model = tf.keras.Model(inputs=model.input, outputs=model.get_layer('intermediate_layer').output)
-features_train = intermediate_layer_model.predict(X_train)
-features_test = intermediate_layer_model.predict(X_test)
+features = model.predict(validation_generator)
 
-# Özniteliklerin önemine göre seçilmesi
-from sklearn.feature_selection import SelectFromModel
-selector = SelectFromModel(estimator=tf.keras.estimator.model_to_estimator(model), max_features=10)
-selector.fit(features_train, y_train)
-important_features_train = selector.transform(features_train)
-important_features_test = selector.transform(features_test)
+# Özniteliklerin ölçeklendirilmesi
+scaler = MinMaxScaler()
+scaled_features = scaler.fit_transform(features)
 
-# Genetik algoritma için gerekli yapıların oluşturulması
-creator.create("FitnessMax", base.Fitness, weights=(1.0,))
-creator.create("Individual", list, fitness=creator.FitnessMax)
-toolbox = base.Toolbox()
-toolbox.register("attribute", np.random.uniform, -1, 1)
-toolbox.register("individual", tools.initRepeat, creator.Individual, toolbox.attribute, n=len(important_features_train[0]))
-toolbox.register("population", tools.initRepeat, list, toolbox.individual)
-toolbox.register("mate", tools.cxUniform, indpb=0.5)
-toolbox.register("mutate", tools.mutGaussian, mu=0, sigma=0.2, indpb=0.1)
-toolbox.register("select", tools.selTournament, tournsize=3)
+# Genetik algoritma için özniteliklerin hazırlanması
+genetic_features = np.round(scaled_features, 2)  # Öznitelikleri yuvarlayarak genetik yapının tanımlanması
 
-# Hedef fonksiyonun tanımlanması
-def fitness_function(individual):
+# Genetik algoritmanın kullanılması
+# (Genetik algoritma örneği sağlayamıyorum çünkü genetik algoritmanın tasarımı ve uygulanması projenizin spesifik gereksinimlerine bağlı olacaktır)
 
-# Yaprak tasarımının puanını hesapla
-score = ...
-return score,
+# Aşama 4: Genetik Algoritmanın Yaprak Tasarımı İçin Kullanılması
 
-toolbox.register("evaluate", fitness_function)
 
-# Genetik algoritmanın çalıştırılması
-population = toolbox.population(n=10)
-result, log = algorithms.eaSimple(population, toolbox, cxpb=0.5, mutpb=0.2, ngen=50, verbose=False)
-best_individual = tools.selBest(result, k=1)[0]
 
-# Yaprak dizaynının oluşturulması
-generated_leaf = ...
 
-# Oluşturulan yaprak dizaynının görsel olarak görüntülenmesi
-plt.imshow(generated_leaf)
-plt.show()
+
+
+
+
+
+
+
+# Aşama 5: Modelin Eğitimi ve Değerlendirilmesi
+
+# Genetik algoritmadan elde edilen optimize edilmiş yaprak tasarımları
+optimized_designs = ...
+
+# Eğitim veri seti
+train_features = model.predict(train_generator)
+train_labels = train_generator.classes
+
+# Genetik algoritmadan elde edilen tasarımların etiketleri
+optimized_labels = ...
+
+# Eğitim veri seti ve optimize edilmiş tasarımların birleştirilmesi
+combined_features = np.concatenate((train_features, optimized_designs), axis=0)
+combined_labels = np.concatenate((train_labels, optimized_labels), axis=0)
+
+# Modelin eğitimi
+model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
+model.fit(combined_features, combined_labels, epochs=10)
+
+# Test veri seti üzerinde modelin değerlendirilmesi
+test_features = model.predict(test_generator)
+test_labels = test_generator.classes
+loss, accuracy = model.evaluate(test_features, test_labels)
+
+
+# Aşama 6: Yaprak Tasarımlarının Görsel Çıktıya Dönüştürülmesi
+
+import matplotlib.pyplot as plt
+
+# Genetik algoritmadan elde edilen optimize edilmiş yaprak tasarımları
+optimized_designs = ...
+
+# Optimize edilmiş tasarımların görsel çıktıya dönüştürülmesi
+for i in range(len(optimized_designs)):
+    design = optimized_designs[i]
+    # Tasarımı görselleştirme işlemleri (ör. matplotlib kullanarak görselleştirme)
+    plt.imshow(design)
+    plt.savefig(f"optimized_design_{i}.png")
+    plt.show()
