@@ -44,9 +44,13 @@ Brown, S. (2020). Genetik Algoritma Optimizasyonu İçin Uygulama Rehberi. O'Rei
 Bu proje açık kaynaklıdır ve katkılarınızı bekleriz. Katkıda bulunmak için aşağıdaki adımları izleyebilirsiniz:
 
 Bu projeyi forklayın.
+
 Yeni bir branch oluşturun: git checkout -b feature/yeni-ozellik
+
 Değişikliklerinizi yapın ve commit'leyin: git commit -m 'Yeni bir özellik ekle'
+
 Forkladığınız repoya pushlayın: git push origin feature/yeni-ozellik
+
 Pull request oluşturun ve değişikliklerinizi tartışmaya açın.
 
 ---------------------------------------------------------------------------------------
