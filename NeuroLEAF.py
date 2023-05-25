@@ -9,6 +9,10 @@ import matplotlib.pyplot as plt
 # Veri setinin yüklenmesi
 data = pd.read_csv("veri-seti.csv")
 
+# Sadece Çınar, Asma ve Zeytin ağacı yapraklarını içeren veri seti oluşturulması
+selected_leaves = ["Cinar agaci yapragi", "Asma Yapragi", "Zeytin agaci yapragi"]
+data = data[data["etiket"].isin(selected_leaves)]
+
 # Veri setinin eğitim ve test olarak bölünmesi
 X = data.drop('etiket', axis=1)
 y = data['etiket']
@@ -57,20 +61,20 @@ toolbox.register("select", tools.selTournament, tournsize=3)
 # Hedef fonksiyonun tanımlanması
 def fitness_function(individual):
 
-#Yaprak tasarımının puanını hesapla
+# Yaprak tasarımının puanını hesapla
 score = ...
 return score,
 
 toolbox.register("evaluate", fitness_function)
 
-#Genetik algoritmanın çalıştırılması
+# Genetik algoritmanın çalıştırılması
 population = toolbox.population(n=10)
 result, log = algorithms.eaSimple(population, toolbox, cxpb=0.5, mutpb=0.2, ngen=50, verbose=False)
 best_individual = tools.selBest(result, k=1)[0]
 
-#Yaprak dizaynının oluşturulması
+# Yaprak dizaynının oluşturulması
 generated_leaf = ...
 
-#Oluşturulan yaprak dizaynının görsel olarak görüntülenmesi
+# Oluşturulan yaprak dizaynının görsel olarak görüntülenmesi
 plt.imshow(generated_leaf)
 plt.show()
