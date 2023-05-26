@@ -6,21 +6,12 @@ from tensorflow.keras import layers
 import matplotlib.pyplot as plt
 
 # Veri setini yükleyin veya veri setinizin yükleme kodlarını buraya ekleyin
-# Örneğin:
-# (X_train, _), (_, _) = keras.datasets.mnist.load_data()
-# Burada, veri setinizi nasıl yükleyeceğinizi belirtmelisiniz.
 
 # Adım 2: Veri setini hazırlamak
 
 # Veri setinizi GAN modeline uygun hale getirmek için gerekli dönüşümleri uygulayın.
-# Örneğin:
-# X_train = (X_train - 127.5) / 127.5
-# Bu, veri setini -1 ila 1 aralığına normalize eder.
 
 # Veri setinizi GAN modeline uygun şekilde yükleyin.
-# Örneğin:
-# dataset = tf.data.Dataset.from_tensor_slices(X_train).shuffle(10000).batch(batch_size)
-# Burada, veri setinizi nasıl oluşturacağınızı belirtmelisiniz.
 
 # Adım 3: Discriminator (Ayırt Edici) modelini oluşturmak
 
